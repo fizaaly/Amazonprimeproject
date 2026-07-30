@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories – Amazon Prime Video</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-hero {
+            padding: 60px 48px 40px;
+            background: linear-gradient(135deg, #001a0a 0%, #002a14 60%, #00050d 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .page-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        .page-hero h1 span { color: var(--green); }
+        .page-hero p { color: var(--text-secondary); font-size: 16px; max-width: 520px; }
+
+        /* category grid */
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 14px;
+            padding: 4px 0 8px;
+        }
+        .cat-card {
+            position: relative;
+            height: 110px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .cat-card:hover { transform: scale(1.04) translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.7); }
+        .cat-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+            transition: opacity 0.25s ease, transform 0.4s ease;
+        }
+        .cat-card:hover img { opacity: 0.7; transform: scale(1.06); }
+        .cat-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, transparent 70%);
+        }
+        .cat-label {
+            position: absolute;
+            bottom: 12px;
+            left: 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+        .cat-icon {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            font-size: 20px;
+            opacity: 0.8;
+        }
+
+        /* active category section */
+        .cat-section { display: none; }
+        .cat-section.active { display: block; }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 4px 0 20px;
+        }
+        .filter-tab {
+            padding: 8px 20px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+        }
+        .filter-tab:hover, .filter-tab.active {
+            background: var(--prime-blue);
+            color: #fff;
+            border-color: var(--prime-blue);
+        }
+
+        @media (max-width: 768px) {
+            .page-hero { padding: 40px 14px 28px; }
+            .cat-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- navbar -->
+<header class="navbar" id="navbar">
+    <div class="logo">prime</div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="store.html">Store</a>
+        <a href="livetv.html">Live TV</a>
+        <a href="categories.html" class="active-tab">Categories</a>
+    </nav>
+    <div class="nav-actions">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" placeholder="Search movies, shows...">
+        </div>
+        <button class="signin-btn" id="signinBtn">Sign In</button>
+        <div class="user-avatar" id="userAvatar" title="My Account"></div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+    </button>
+</header>
+
+<!-- mobile menu -->
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="store.html">Store</a>
+    <a href="livetv.html">Live TV</a>
+    <a href="categories.html" class="active-tab">Categories</a>
+    <button class="signin-btn" id="mobileSigninBtn">Sign In</button>
+</nav>
+
+<main>
+
+    <div class="page-hero">
+        <h1>Browse <span>Categories</span></h1>
+        <p>Find exactly what you're in the mood for — action, drama, comedy, sci-fi and much more.</p>
+    </div>
+
+    <!-- category cards -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>All Categories <span class="chevron">›</span></h2>
+        </div>
+        <div class="cat-grid">
+            <div class="cat-card" data-cat="action">
+                <img src="images/movie/The Batman.jpg" alt="Action">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-bolt" style="color:#facc15;"></i>
+                <div class="cat-label">Action</div>
+            </div>
+            <div class="cat-card" data-cat="drama">
+                <img src="images/shows/download (1).jpg" alt="Drama">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-masks-theater" style="color:#a78bfa;"></i>
+                <div class="cat-label">Drama</div>
+            </div>
+            <div class="cat-card" data-cat="scifi">
+                <img src="images/movie/DUNE POSTER 4K 2021.jpg" alt="Sci-Fi">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-rocket" style="color:#00a8e1;"></i>
+                <div class="cat-label">Sci-Fi</div>
+            </div>
+            <div class="cat-card" data-cat="crime">
+                <img src="images/hero/breaking-bad.jpg" alt="Crime">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-handcuffs" style="color:#f87171;"></i>
+                <div class="cat-label">Crime</div>
+            </div>
+            <div class="cat-card" data-cat="fantasy">
+                <img src="images/hero/rings-of-power.jpg" alt="Fantasy">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-hat-wizard" style="color:#34d399;"></i>
+                <div class="cat-label">Fantasy</div>
+            </div>
+            <div class="cat-card" data-cat="comedy">
+                <img src="images/shows/download (5).jpg" alt="Comedy">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-face-laugh" style="color:#fbbf24;"></i>
+                <div class="cat-label">Comedy</div>
+            </div>
+            <div class="cat-card" data-cat="horror">
+                <img src="images/shows/download (6).jpg" alt="Horror">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-skull" style="color:#f87171;"></i>
+                <div class="cat-label">Horror</div>
+            </div>
+            <div class="cat-card" data-cat="romance">
+                <img src="images/shows/download (7).jpg" alt="Romance">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-heart" style="color:#fb7185;"></i>
+                <div class="cat-label">Romance</div>
+            </div>
+            <div class="cat-card" data-cat="thriller">
+                <img src="images/shows/download (8).jpg" alt="Thriller">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-eye" style="color:#94a3b8;"></i>
+                <div class="cat-label">Thriller</div>
+            </div>
+            <div class="cat-card" data-cat="anime">
+                <img src="images/shows/download (10).jpg" alt="Anime">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-star" style="color:#f472b6;"></i>
+                <div class="cat-label">Anime</div>
+            </div>
+            <div class="cat-card" data-cat="documentary">
+                <img src="images/shows/download (11).jpg" alt="Documentary">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-film" style="color:#6ee7b7;"></i>
+                <div class="cat-label">Documentary</div>
+            </div>
+            <div class="cat-card" data-cat="kids">
+                <img src="images/shows/download (12).jpg" alt="Kids">
+                <div class="cat-overlay"></div>
+                <i class="cat-icon fa-solid fa-child" style="color:#fde68a;"></i>
+                <div class="cat-label">Kids</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- content by category -->
+    <section class="content-section" id="catResultSection" style="display:none;">
+        <div class="section-header">
+            <h2 id="catResultTitle">Action <span class="chevron">›</span></h2>
+        </div>
+        <div class="filter-tabs" id="filterTabs">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="movies">Movies</button>
+            <button class="filter-tab" data-filter="shows">Shows</button>
+        </div>
+        <div class="movie-row portrait-row" id="catResultRow"></div>
+    </section>
+
+    <!-- trending by genre -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Trending in Action <span class="chevron">›</span></h2>
+            <a href="#" class="see-all-btn">See all</a>
+        </div>
+        <div class="movie-row portrait-row">
+            <div class="movie-card vertical-card"><img src="images/movie/The Batman.jpg" alt="The Batman" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/movie/download (23).jpg" alt="Jurassic World" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/movie/download (24).jpg" alt="Planet Of Apes" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/movie/download (12).jpg" alt="Avengers" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/movie/download (11).jpg" alt="Spider Man" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (17).jpg" alt="Show 17" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (18).jpg" alt="Show 18" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Best in Drama <span class="chevron">›</span></h2>
+            <a href="#" class="see-all-btn">See all</a>
+        </div>
+        <div class="movie-row portrait-row">
+            <div class="movie-card vertical-card"><img src="images/hero/breaking-bad.jpg" alt="Breaking Bad" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/hero/peaky-blinders.jpg" alt="Peaky Blinders" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (1).jpg" alt="Show 1" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (2).jpg" alt="Show 2" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (3).jpg" alt="Show 3" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (4).jpg" alt="Show 4" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/movie/download (20).jpg" alt="Game Of Thrones" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Top Sci-Fi &amp; Fantasy <span class="chevron">›</span></h2>
+            <a href="#" class="see-all-btn">See all</a>
+        </div>
+        <div class="movie-row landscape-row">
+            <div class="movie-card horizontal-card"><img src="images/hero/dune.jpg" alt="Dune" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card horizontal-card"><img src="images/hero/rings-of-power.jpg" alt="Rings Of Power" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card horizontal-card"><img src="images/shows/download (25).jpg" alt="Show 25" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card horizontal-card"><img src="images/shows/download (26).jpg" alt="Show 26" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card horizontal-card"><img src="images/movie/download (19).jpg" alt="Dark" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-logo">prime <span>video</span></div>
+        <div class="footer-links">
+            <a href="#">About Us</a><a href="#">Help</a><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a>
+        </div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 Amazon Prime Video clone</p></div>
+</footer>
+
+<script>
+    var navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", function () {
+        navbar.classList.toggle("scrolled", window.scrollY > 20);
+    });
+    var hamburger = document.getElementById("hamburger");
+    var mobileMenu = document.getElementById("mobileMenu");
+    if (hamburger && mobileMenu) {
+        hamburger.addEventListener("click", function (e) {
+            e.stopPropagation();
+            hamburger.classList.toggle("open");
+            mobileMenu.classList.toggle("open");
+        });
+    }
+    var signinBtn = document.getElementById("signinBtn");
+    var mobileSigninBtn = document.getElementById("mobileSigninBtn");
+    var userAvatar = document.getElementById("userAvatar");
+    var currentUser = JSON.parse(localStorage.getItem("primeUser") || "null");
+    if (currentUser) {
+        if (signinBtn) signinBtn.style.display = "none";
+        if (mobileSigninBtn) mobileSigninBtn.style.display = "none";
+        if (userAvatar) { userAvatar.classList.add("show"); userAvatar.textContent = currentUser.name.charAt(0).toUpperCase(); }
+    }
+
+    // category card click
+    var catData = {
+        action:   ["images/movie/The Batman.jpg|The Batman","images/movie/download (12).jpg|Avengers","images/movie/download (11).jpg|Spider Man","images/movie/download (23).jpg|Jurassic World","images/movie/download (24).jpg|Planet Of Apes","images/shows/download (17).jpg|Loki","images/hero/the-boys.jpg|The Boys"],
+        drama:    ["images/hero/breaking-bad.jpg|Breaking Bad","images/hero/peaky-blinders.jpg|Peaky Blinders","images/shows/download (1).jpg|Show 1","images/shows/download (2).jpg|Show 2","images/shows/download (3).jpg|Show 3","images/movie/download (20).jpg|Game Of Thrones"],
+        scifi:    ["images/hero/dune.jpg|Dune","images/movie/download (19).jpg|Dark","images/shows/download (25).jpg|The Witcher","images/movie/movie5.png|Interstellar","images/movie/movie6.png|Inception"],
+        crime:    ["images/hero/breaking-bad.jpg|Breaking Bad","images/hero/peaky-blinders.jpg|Peaky Blinders","images/hero/the-batman.jpg|The Batman","images/shows/download (4).jpg|Show 4","images/shows/download (6).jpg|Show 6"],
+        fantasy:  ["images/hero/rings-of-power.jpg|Rings Of Power","images/hero/dune.jpg|Dune","images/shows/download (26).jpg|Cobra Kai","images/shows/download (27).jpg|Mandalorian","images/shows/download (28).jpg|Arcane"],
+        comedy:   ["images/movie/download (14).jpg|Comedy 1","images/movie/download (15).jpg|Comedy 2","images/shows/download (19).jpg|Comedy 5","images/shows/download (20).jpg|Comedy 6"],
+        horror:   ["images/shows/download (8).jpg|Show 8","images/shows/download (9).jpg|Show 9","images/movie/download (22).jpg|World War Z"],
+        romance:  ["images/shows/download (7).jpg|Show 7","images/shows/download (5).jpg|Show 5"],
+        thriller: ["images/shows/download (8).jpg|Show 8","images/movie/download (21).jpg|Brahmastra","images/movie/movie7.png|The Dark Knight"],
+        anime:    ["images/shows/download (10).jpg|Attack On Titan","images/shows/download (28).jpg|Arcane"],
+        documentary: ["images/shows/download (11).jpg|Show 11","images/movie/download (19).jpg|Dark"],
+        kids:     ["images/shows/download (12).jpg|Show 12","images/shows/download (13).jpg|Show 13"]
+    };
+
+    var catResultSection = document.getElementById("catResultSection");
+    var catResultTitle = document.getElementById("catResultTitle");
+    var catResultRow = document.getElementById("catResultRow");
+
+    document.querySelectorAll(".cat-card").forEach(function (card) {
+        card.addEventListener("click", function () {
+            var cat = card.getAttribute("data-cat");
+            var label = card.querySelector(".cat-label").textContent;
+            catResultTitle.innerHTML = label + ' <span class="chevron">›</span>';
+            catResultRow.innerHTML = "";
+            var items = catData[cat] || [];
+            items.forEach(function (item) {
+                var parts = item.split("|");
+                var el = document.createElement("div");
+                el.className = "movie-card vertical-card";
+                el.innerHTML = '<img src="' + parts[0] + '" alt="' + parts[1] + '" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div>';
+                catResultRow.appendChild(el);
+            });
+            catResultSection.style.display = "block";
+            catResultSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+    });
+</script>
+
+</body>
+</html>

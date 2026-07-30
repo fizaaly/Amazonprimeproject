@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store – Amazon Prime Video</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-hero {
+            padding: 60px 48px 40px;
+            background: linear-gradient(135deg, #000d1a 0%, #001f3f 60%, #00050d 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .page-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        .page-hero h1 span { color: var(--prime-blue); }
+        .page-hero p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            max-width: 520px;
+        }
+        .store-banner {
+            margin: 32px 48px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+            height: 220px;
+            background: linear-gradient(90deg, #001f3f, #003366);
+            display: flex;
+            align-items: center;
+            padding: 0 48px;
+            border: 1px solid rgba(0,168,225,0.2);
+        }
+        .store-banner-text h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(22px, 3vw, 36px);
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .store-banner-text p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .store-banner-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: var(--prime-blue);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.25s ease, transform 0.25s ease;
+        }
+        .store-banner-btn:hover { background: var(--prime-blue-dark); transform: translateY(-2px); }
+        .store-banner-icon {
+            margin-left: auto;
+            font-size: 100px;
+            color: rgba(0,168,225,0.15);
+            flex-shrink: 0;
+        }
+        .price-tag {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: var(--prime-blue);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: var(--radius-full);
+        }
+        .rent-card {
+            position: relative;
+            flex-shrink: 0;
+            width: 175px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            scroll-snap-align: start;
+        }
+        .rent-card:hover { transform: scale(1.06) translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.7); }
+        .rent-card img { width: 100%; height: 262px; object-fit: cover; display: block; }
+        .rent-card-info {
+            padding: 10px 12px 14px;
+        }
+        .rent-card-info .title {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .rent-card-info .price {
+            color: var(--prime-blue);
+            font-size: 13px;
+            font-weight: 700;
+        }
+        @media (max-width: 768px) {
+            .page-hero { padding: 40px 14px 28px; }
+            .store-banner { margin: 20px 14px; padding: 0 20px; height: auto; padding: 28px 20px; }
+            .store-banner-icon { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- navbar -->
+<header class="navbar" id="navbar">
+    <div class="logo">prime</div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="store.html" class="active-tab">Store</a>
+        <a href="livetv.html">Live TV</a>
+        <a href="categories.html">Categories</a>
+    </nav>
+    <div class="nav-actions">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" placeholder="Search movies, shows...">
+        </div>
+        <button class="signin-btn" id="signinBtn">Sign In</button>
+        <div class="user-avatar" id="userAvatar" title="My Account"></div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+    </button>
+</header>
+
+<!-- mobile menu -->
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="store.html" class="active-tab">Store</a>
+    <a href="livetv.html">Live TV</a>
+    <a href="categories.html">Categories</a>
+    <button class="signin-btn" id="mobileSigninBtn">Sign In</button>
+</nav>
+
+<main>
+
+    <div class="page-hero">
+        <h1>Prime <span>Store</span></h1>
+        <p>Rent or buy the latest movies and shows. No subscription needed — pay only for what you watch.</p>
+    </div>
+
+    <!-- promo banner -->
+    <div class="store-banner">
+        <div class="store-banner-text">
+            <h2>New Releases This Week</h2>
+            <p>Get the hottest titles before they hit streaming.</p>
+            <button class="store-banner-btn"><i class="fa-solid fa-bag-shopping"></i> Browse All</button>
+        </div>
+        <i class="fa-solid fa-film store-banner-icon"></i>
+    </div>
+
+    <!-- rent movies -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Rent Movies <span class="chevron">›</span></h2>
+            <a href="#" class="see-all-btn">See all</a>
+        </div>
+        <div class="movie-row portrait-row">
+            <div class="rent-card">
+                <img src="images/movie/DUNE POSTER 4K 2021.jpg" alt="Dune">
+                <div class="rent-card-info"><div class="title">Dune (2021)</div><div class="price">Rent ₹99</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/The Batman.jpg" alt="The Batman">
+                <div class="rent-card-info"><div class="title">The Batman</div><div class="price">Rent ₹99</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/download (10).jpg" alt="Movie">
+                <div class="rent-card-info"><div class="title">Avengers: Endgame</div><div class="price">Rent ₹79</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/download (11).jpg" alt="Movie">
+                <div class="rent-card-info"><div class="title">Spider-Man: NWH</div><div class="price">Rent ₹79</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/download (12).jpg" alt="Movie">
+                <div class="rent-card-info"><div class="title">Doctor Strange 2</div><div class="price">Rent ₹79</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/download (13).jpg" alt="Movie">
+                <div class="rent-card-info"><div class="title">Black Panther 2</div><div class="price">Rent ₹79</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/The Revenant (2015).jpg" alt="The Revenant">
+                <div class="rent-card-info"><div class="title">The Revenant</div><div class="price">Rent ₹59</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/movie5.png" alt="Movie">
+                <div class="rent-card-info"><div class="title">Interstellar</div><div class="price">Rent ₹59</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- buy movies -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Buy &amp; Own <span class="chevron">›</span></h2>
+            <a href="#" class="see-all-btn">See all</a>
+        </div>
+        <div class="movie-row portrait-row">
+            <div class="rent-card">
+                <img src="images/movie/movie6.png" alt="Movie">
+                <div class="rent-card-info"><div class="title">Inception</div><div class="price">Buy ₹299</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/movie7.png" alt="Movie">
+                <div class="rent-card-info"><div class="title">The Dark Knight</div><div class="price">Buy ₹299</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/movie8.png" alt="Movie">
+                <div class="rent-card-info"><div class="title">Oppenheimer</div><div class="price">Buy ₹349</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/download (23).jpg" alt="Movie">
+                <div class="rent-card-info"><div class="title">Jurassic World</div><div class="price">Buy ₹249</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/download (24).jpg" alt="Movie">
+                <div class="rent-card-info"><div class="title">Planet of Apes</div><div class="price">Buy ₹249</div></div>
+            </div>
+            <div class="rent-card">
+                <img src="images/movie/download (22).jpg" alt="Movie">
+                <div class="rent-card-info"><div class="title">World War Z</div><div class="price">Buy ₹199</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- new arrivals -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>New Arrivals <span class="chevron">›</span></h2>
+            <a href="#" class="see-all-btn">See all</a>
+        </div>
+        <div class="movie-row landscape-row">
+            <div class="movie-card horizontal-card"><img src="images/movie/download (14).jpg" alt="John Wick 4" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card horizontal-card"><img src="images/movie/download (15).jpg" alt="Fast X" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card horizontal-card"><img src="images/movie/download (16).jpg" alt="GotG 3" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card horizontal-card"><img src="images/movie/download (17).jpg" alt="Mission Impossible" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card horizontal-card"><img src="images/movie/download (18).jpg" alt="Indiana Jones 5" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-logo">prime <span>video</span></div>
+        <div class="footer-links">
+            <a href="#">About Us</a><a href="#">Help</a><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a>
+        </div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 Amazon Prime Video clone</p></div>
+</footer>
+
+<script>
+    // navbar scroll
+    var navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", function () {
+        navbar.classList.toggle("scrolled", window.scrollY > 20);
+    });
+    // hamburger
+    var hamburger = document.getElementById("hamburger");
+    var mobileMenu = document.getElementById("mobileMenu");
+    if (hamburger && mobileMenu) {
+        hamburger.addEventListener("click", function (e) {
+            e.stopPropagation();
+            hamburger.classList.toggle("open");
+            mobileMenu.classList.toggle("open");
+        });
+    }
+    // auth UI
+    var signinBtn = document.getElementById("signinBtn");
+    var mobileSigninBtn = document.getElementById("mobileSigninBtn");
+    var userAvatar = document.getElementById("userAvatar");
+    var currentUser = JSON.parse(localStorage.getItem("primeUser") || "null");
+    if (currentUser) {
+        if (signinBtn) signinBtn.style.display = "none";
+        if (mobileSigninBtn) mobileSigninBtn.style.display = "none";
+        if (userAvatar) { userAvatar.classList.add("show"); userAvatar.textContent = currentUser.name.charAt(0).toUpperCase(); }
+    }
+</script>
+
+</body>
+</html>

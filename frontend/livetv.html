@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live TV – Amazon Prime Video</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .page-hero {
+            padding: 60px 48px 40px;
+            background: linear-gradient(135deg, #0a0010 0%, #1a003a 60%, #00050d 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .page-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        .page-hero h1 span { color: #ff4757; }
+        .page-hero p { color: var(--text-secondary); font-size: 16px; max-width: 520px; }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ff4757;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: var(--radius-full);
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+        }
+        .live-badge .dot-pulse {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff;
+            animation: pulse 1.2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        /* channel grid */
+        .channel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            padding: 4px 0 8px;
+        }
+        .channel-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .channel-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+            border-color: rgba(0,168,225,0.4);
+        }
+        .channel-thumb {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+        .channel-info {
+            padding: 12px 14px;
+        }
+        .channel-info .ch-name {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .channel-info .ch-now {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 8px;
+        }
+        .channel-info .ch-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #ff4757;
+        }
+        .channel-info .ch-live i { font-size: 8px; }
+
+        /* schedule table */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .schedule-table th {
+            text-align: left;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.04);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+        }
+        .schedule-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            vertical-align: middle;
+        }
+        .schedule-table tr:hover td { background: rgba(255,255,255,0.03); }
+        .schedule-table .time { color: var(--prime-blue); font-weight: 600; white-space: nowrap; }
+        .schedule-table .show-name { font-weight: 600; }
+        .schedule-table .show-genre { color: var(--text-muted); font-size: 12px; margin-top: 3px; }
+        .schedule-table .live-now {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255,71,87,0.15);
+            color: #ff4757;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(255,71,87,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .page-hero { padding: 40px 14px 28px; }
+            .channel-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- navbar -->
+<header class="navbar" id="navbar">
+    <div class="logo">prime</div>
+    <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="store.html">Store</a>
+        <a href="livetv.html" class="active-tab">Live TV</a>
+        <a href="categories.html">Categories</a>
+    </nav>
+    <div class="nav-actions">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" placeholder="Search channels, shows...">
+        </div>
+        <button class="signin-btn" id="signinBtn">Sign In</button>
+        <div class="user-avatar" id="userAvatar" title="My Account"></div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+    </button>
+</header>
+
+<!-- mobile menu -->
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="store.html">Store</a>
+    <a href="livetv.html" class="active-tab">Live TV</a>
+    <a href="categories.html">Categories</a>
+    <button class="signin-btn" id="mobileSigninBtn">Sign In</button>
+</nav>
+
+<main>
+
+    <div class="page-hero">
+        <div class="live-badge"><span class="dot-pulse"></span> LIVE</div>
+        <h1>Live <span>TV</span></h1>
+        <p>Watch live news, sports, entertainment and more — all in one place with your Prime subscription.</p>
+    </div>
+
+    <!-- live channels -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Live Channels <span class="chevron">›</span></h2>
+            <a href="#" class="see-all-btn">See all</a>
+        </div>
+        <div class="channel-grid">
+            <div class="channel-card">
+                <img class="channel-thumb" src="images/shows/download (1).jpg" alt="Channel 1">
+                <div class="channel-info">
+                    <div class="ch-name">Prime News 24</div>
+                    <div class="ch-now">Breaking News Live</div>
+                    <div class="ch-live"><i class="fa-solid fa-circle"></i> LIVE NOW</div>
+                </div>
+            </div>
+            <div class="channel-card">
+                <img class="channel-thumb" src="images/shows/download (2).jpg" alt="Channel 2">
+                <div class="channel-info">
+                    <div class="ch-name">Sports Prime</div>
+                    <div class="ch-now">IPL Highlights</div>
+                    <div class="ch-live"><i class="fa-solid fa-circle"></i> LIVE NOW</div>
+                </div>
+            </div>
+            <div class="channel-card">
+                <img class="channel-thumb" src="images/shows/download (3).jpg" alt="Channel 3">
+                <div class="channel-info">
+                    <div class="ch-name">Entertainment HD</div>
+                    <div class="ch-now">Reality Show Special</div>
+                    <div class="ch-live"><i class="fa-solid fa-circle"></i> LIVE NOW</div>
+                </div>
+            </div>
+            <div class="channel-card">
+                <img class="channel-thumb" src="images/shows/download (4).jpg" alt="Channel 4">
+                <div class="channel-info">
+                    <div class="ch-name">Drama Central</div>
+                    <div class="ch-now">Evening Primetime</div>
+                    <div class="ch-live"><i class="fa-solid fa-circle"></i> LIVE NOW</div>
+                </div>
+            </div>
+            <div class="channel-card">
+                <img class="channel-thumb" src="images/shows/download (5).jpg" alt="Channel 5">
+                <div class="channel-info">
+                    <div class="ch-name">Sci-Fi Universe</div>
+                    <div class="ch-now">Space Exploration Docs</div>
+                    <div class="ch-live"><i class="fa-solid fa-circle"></i> LIVE NOW</div>
+                </div>
+            </div>
+            <div class="channel-card">
+                <img class="channel-thumb" src="images/shows/download (6).jpg" alt="Channel 6">
+                <div class="channel-info">
+                    <div class="ch-name">Crime Watch</div>
+                    <div class="ch-now">True Crime Documentary</div>
+                    <div class="ch-live"><i class="fa-solid fa-circle"></i> LIVE NOW</div>
+                </div>
+            </div>
+            <div class="channel-card">
+                <img class="channel-thumb" src="images/shows/download (7).jpg" alt="Channel 7">
+                <div class="channel-info">
+                    <div class="ch-name">Comedy Club</div>
+                    <div class="ch-now">Stand-Up Special</div>
+                    <div class="ch-live"><i class="fa-solid fa-circle"></i> LIVE NOW</div>
+                </div>
+            </div>
+            <div class="channel-card">
+                <img class="channel-thumb" src="images/shows/download (8).jpg" alt="Channel 8">
+                <div class="channel-info">
+                    <div class="ch-name">Kids Zone</div>
+                    <div class="ch-now">Cartoon Marathon</div>
+                    <div class="ch-live"><i class="fa-solid fa-circle"></i> LIVE NOW</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- today's schedule -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Today's Schedule <span class="chevron">›</span></h2>
+        </div>
+        <div style="overflow-x:auto; border-radius: var(--radius-md); border: 1px solid var(--border);">
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Show</th>
+                        <th>Channel</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="time">8:00 PM</td>
+                        <td><div class="show-name">Breaking News Live</div><div class="show-genre">News</div></td>
+                        <td>Prime News 24</td>
+                        <td><span class="live-now"><i class="fa-solid fa-circle"></i> Live Now</span></td>
+                    </tr>
+                    <tr>
+                        <td class="time">8:30 PM</td>
+                        <td><div class="show-name">IPL Match Highlights</div><div class="show-genre">Sports</div></td>
+                        <td>Sports Prime</td>
+                        <td><span class="live-now"><i class="fa-solid fa-circle"></i> Live Now</span></td>
+                    </tr>
+                    <tr>
+                        <td class="time">9:00 PM</td>
+                        <td><div class="show-name">Evening Drama Special</div><div class="show-genre">Drama</div></td>
+                        <td>Drama Central</td>
+                        <td style="color:var(--text-muted); font-size:13px;">Upcoming</td>
+                    </tr>
+                    <tr>
+                        <td class="time">9:30 PM</td>
+                        <td><div class="show-name">Space Docs: Mars Mission</div><div class="show-genre">Documentary</div></td>
+                        <td>Sci-Fi Universe</td>
+                        <td style="color:var(--text-muted); font-size:13px;">Upcoming</td>
+                    </tr>
+                    <tr>
+                        <td class="time">10:00 PM</td>
+                        <td><div class="show-name">Late Night Comedy</div><div class="show-genre">Comedy</div></td>
+                        <td>Comedy Club</td>
+                        <td style="color:var(--text-muted); font-size:13px;">Upcoming</td>
+                    </tr>
+                    <tr>
+                        <td class="time">10:30 PM</td>
+                        <td><div class="show-name">True Crime Files</div><div class="show-genre">Crime</div></td>
+                        <td>Crime Watch</td>
+                        <td style="color:var(--text-muted); font-size:13px;">Upcoming</td>
+                    </tr>
+                    <tr>
+                        <td class="time">11:00 PM</td>
+                        <td><div class="show-name">World News Tonight</div><div class="show-genre">News</div></td>
+                        <td>Prime News 24</td>
+                        <td style="color:var(--text-muted); font-size:13px;">Upcoming</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- popular live shows -->
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Popular on Live TV <span class="chevron">›</span></h2>
+            <a href="#" class="see-all-btn">See all</a>
+        </div>
+        <div class="movie-row portrait-row">
+            <div class="movie-card vertical-card"><img src="images/shows/download (25).jpg" alt="Show 25" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (26).jpg" alt="Show 26" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (27).jpg" alt="Show 27" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (28).jpg" alt="Show 28" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (29).jpg" alt="Show 29" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (10).jpg" alt="Attack On Titan" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (11).jpg" alt="Show 11" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+            <div class="movie-card vertical-card"><img src="images/shows/download (12).jpg" alt="Show 12" loading="lazy"><div class="play-overlay"><i class="fa-solid fa-play"></i></div></div>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-logo">prime <span>video</span></div>
+        <div class="footer-links">
+            <a href="#">About Us</a><a href="#">Help</a><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a>
+        </div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 Amazon Prime Video clone</p></div>
+</footer>
+
+<script>
+    var navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", function () {
+        navbar.classList.toggle("scrolled", window.scrollY > 20);
+    });
+    var hamburger = document.getElementById("hamburger");
+    var mobileMenu = document.getElementById("mobileMenu");
+    if (hamburger && mobileMenu) {
+        hamburger.addEventListener("click", function (e) {
+            e.stopPropagation();
+            hamburger.classList.toggle("open");
+            mobileMenu.classList.toggle("open");
+        });
+    }
+    var signinBtn = document.getElementById("signinBtn");
+    var mobileSigninBtn = document.getElementById("mobileSigninBtn");
+    var userAvatar = document.getElementById("userAvatar");
+    var currentUser = JSON.parse(localStorage.getItem("primeUser") || "null");
+    if (currentUser) {
+        if (signinBtn) signinBtn.style.display = "none";
+        if (mobileSigninBtn) mobileSigninBtn.style.display = "none";
+        if (userAvatar) { userAvatar.classList.add("show"); userAvatar.textContent = currentUser.name.charAt(0).toUpperCase(); }
+    }
+</script>
+
+</body>
+</html>
